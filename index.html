@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<html>
 <head>
-    <meta charset="utf-8"/>
-    <title>Mini editor foto</title>
-<style type="text/css">
+	
+	<title>Mini Editor Foto</title>
+	<link rel="stylesheet" href="./css/base.css" type="text/css" media="screen">
+	<style>
+
+		<style type="text/css">
         html, body {
             width:100%;
             height:100%;
@@ -20,20 +21,16 @@
         }
     
         canvas{
-            max-width:90%;
-            height: 900px;
-            margin-left: 125px;
-            margin-bottom:20px;
-            overflow:hidden;
-            background-color: #8C001A;
-            float: right;
-            left: 0px;
+			position: relative;
+			border: 1px solid #000;
         }
     
         .w3-sidebar{
+        	margin-top:-20px;
             float:left;
             background-color: papayawhip;
             overflow: hidden;
+            height: 1200px;
         }
     
         .w3-button{
@@ -87,146 +84,150 @@
             margin: 0px;
         }
 </style>    
-
-    <script type="text/javascript">        
-
-        $(function() { 
-            var canvas = document.querySelector("canvas");
-            context = canvas.getContext("2d");
-            var W = canvas.width, H = canvas.height;
-        $(document)
-                .on('dragover', function (e) {
-                    e.preventDefault();
-                })
-                .on('drop', function (e) {
-                    e.preventDefault();
-                    var files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            desenare($("<img></img>")
-                                .attr("src", e.target.result)[0]);
-                        };
-                    }
-                });
-            function desenare(img){
-                
-                context.drawImage(img[0], 0, 0);
-                var imageData = context.getImageData(0, 0, W, H);
-                var pixels = imageData.data;
-
-                for (var y = 0; y < H; y++) {
-                    for (var x = 0; x < W; x++) {
-
-                        // - se calculează indicele de început pentru pixel
-                        // în funcție de coordonate 
-                        // - fiecărui pixel îi corespund patru valori:
-                        //      pixels[i] - Red
-                        //      pixels[i+1] - Green
-                        //      pixels[i+2] - Blue
-                        //      pixels[i+3] - Opacity
-                        var i = (y * W * 4) + x * 4;
-
-                        // se desenează liniile orizontale și verticale
-                        if (x == mx) {
-                            pixels[i] = 255;
-                        }
-
-                        if (y == my) {
-                            pixels[i] = 255;
-                        }
-
-                        var d = Math.sqrt((x - mx) * (x - mx) + (y - my) * (y - my));
-                        if (d > 150) {
-                            // pixelii din exteriorul cercului de rază 150 sunt transformați în tonuri de gri
-                            // și opacitatea este variată aleator pentru crearea efectului de noise
-                            pixels[i] = pixels[i + 1] = pixels[i + 2] = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
-                            pixels[i + 3] = 10 + Math.random() * 100;
-                        }
-                        else {
-                            // opacitatea pentru punctele din interiorul cercului este variată
-                            // în funcție de distanța față de centru
-                            pixels[i + 3] = 255 - (100 + d / 1.3);
-                        }
-
-                    }
-                }
-                context.putImageData(imageData, 0, 0);
-            }
-            mx = 0;
-            my = 0;
-            $(window).mousemove(function (e) {
-                mx = e.pageX - canvas.getBoundingClientRect().left;
-                my = e.pageY - canvas.getBoundingClientRect().top;
-            });
-
-            setInterval(function () {
-                mx += Math.round(Math.random() * 2 - 1);
-                my += Math.round(Math.random() * 2 - 1);
-            }, 30);
-        });
-    
-    </script>
-
-
-
-
+	</style>
 </head>
 
 <body>
-   
-   <!--<table>
-        <caption>Functii</caption>
-        <tbody>
-            <tr>
-                <td><input class="button" name="crop" value="crop" id="crop"></td>
-                <td><input class="button" name="desenare" value="desenare" id="desenare"></td>
-            </tr>
-            <tr>
-                <td><input type="button" name="selectie" value="selectie" id="selectie"></td>
-                <td><input type="button" name="scalare" value="scalare" id="scalare"></td>
-            </tr>
-        </tbody>
-    </table>-->
-    <canvas></canvas>
-    <div class="w3-sidebar w3-bar-block" style="width:100px"> 
-        <div class="w3-bar-item w3-button" name="desenare" id="desenare">
-            <label for="checkbox" id="checkboxLabel"><img src="Media/desenare.png"></label>
-            <input type="checkbox" class="checkbox" id="checkbox" />
-            <div id="stuffToShow">
-                    <div class="w3-sidebar w3-bar-block"> 
-                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
-                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="w3-bar-item w3-button" name="selectie" id="selectie">
-            <label for="checkbox2" id="checkboxLabel2"><img src="Media/desenare.png"></label>
-            <input type="checkbox" class="checkbox" id="checkbox2" />
-            <div id="stuffToShow">
-                    <div class="w3-sidebar w3-bar-block"> 
-                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
-                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="w3-bar-item w3-button" name="crop" id="crop">
-            <label for="checkbox3" id="checkboxLabel3"><img src="Media/desenare.png"></label>
-            <input type="checkbox" class="checkbox" id="checkbox3" />
-        </div>
-        
-        <div class="w3-bar-item w3-button" name="scalare" id="scalare">
-            <label for="checkbox4" id="checkboxLabel4"><img src="Media/desenare.png"></label>
-            <input type="checkbox" class="checkbox" id="checkbox4" />
-        </div>
+	
+			    <div class="w3-sidebar w3-bar-block" style="width:100px"> 
+			        <div class="w3-bar-item w3-button" name="desenare" id="desenare">
+			            <label for="checkbox" id="checkboxLabel"><img src="Media/desenare.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox" />
+			            <div id="stuffToShow">
+			                    <div class="w3-sidebar w3-bar-block"> 
+			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
+			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
+			                </div>
+			            </div>
+			        </div>
+			        
+			        <div class="w3-bar-item w3-button" name="selectie" id="selectie">
+			            <label for="checkbox2" id="checkboxLabel2"><img src="Media/desenare.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox2" />
+			            <div id="stuffToShow">
+			                    <div class="w3-sidebar w3-bar-block"> 
+			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
+			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
+			                </div>
+			            </div>
+			        </div>
+			        
+			        <div class="w3-bar-item w3-button" name="crop" id="crop">
+			            <label for="checkbox3" id="checkboxLabel3"><img src="Media/desenare.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox3" />
+			        </div>
+			        
+			        <div class="w3-bar-item w3-button" name="scalare" id="scalare">
+			            <label for="checkbox4" id="checkboxLabel4"><img src="Media/desenare.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox4" />
+			        </div>
 
-        <div class="w3-bar-item w3-button" name="salvare" id="salvare">
-            <label for="checkbox5" id="checkboxLabel5"><img src="Media/desenare.png"></label>
-            <input type="checkbox" class="checkbox" id="checkbox5" />
-        </div>
-      </div>
-        
-</body>
-</html>
+			        <div class="w3-bar-item w3-button" name="salvare" id="salvare">
+			            <label for="checkbox5" id="checkboxLabel5"><img src="Media/desenare.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox5" />
+			        </div>
+			      </div>
+	<div id="container">
+		<header role="banner">
+			<h1>Mini Editor Foto</h1>
+		</header>
+				
+		<div role="main">
+			<section id="main-content">
+				
+				<canvas id="my-canvas" width="700" height="600">Eu sunt canvas-ul.</canvas>
+        		
+				<script>
+					(function () {
+						var canvas = document.getElementById("my-canvas"),
+							context = canvas.getContext("2d"),
+							img = document.createElement("img"),
+							mouseDown = false,
+							brushColor = "rgb(0, 0, 0)",
+							hasText = true,
+							clearCanvas = function () {
+								if (hasText) {
+									context.clearRect(0, 0, canvas.width, canvas.height);
+									hasText = false;
+								}
+							};
+							
+						// Adding instructions
+						context.fillText("Trage o imagine in canvas", 240, 200);
+						context.fillText("Apasa pe un loc din iamgine ca se setezi culoarea pensulei.", 240, 220);
+						
+						// Image for loading	
+						img.addEventListener("load", function () {
+							clearCanvas();
+							context.drawImage(img, 0, 0);
+						}, false);
+						
+						// Detect mousedown
+						canvas.addEventListener("mousedown", function (evt) {
+							clearCanvas();
+							mouseDown = true;
+							context.beginPath();
+						}, false);
+						
+						// Detect mouseup
+						canvas.addEventListener("mouseup", function (evt) {
+							mouseDown = false;
+							var colors = context.getImageData(evt.layerX, evt.layerY, 1, 1).data;
+							brushColor = "rgb(" + colors[0] + ", " + colors[1] + ", " + colors[2] + ")";
+						}, false);
+						
+						// Draw, if mouse button is pressed
+						canvas.addEventListener("mousemove", function (evt) {
+							if (mouseDown) {
+								context.strokeStyle = brushColor;								
+								context.lineWidth = 20;
+								context.lineJoin = "round";
+								context.lineTo(evt.layerX+1, evt.layerY+1);
+								context.stroke();
+							}
+						}, false);
+
+						// To enable drag and drop
+						canvas.addEventListener("dragover", function (evt) {
+							evt.preventDefault();
+						}, false);
+
+						// Handle dropped image file - only Firefox and Google Chrome
+						canvas.addEventListener("drop", function (evt) {
+							var files = evt.dataTransfer.files;
+							if (files.length > 0) {
+								var file = files[0];
+								if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+									var reader = new FileReader();
+									// Note: addEventListener doesn't work in Google Chrome for this event
+									reader.onload = function (evt) {
+										img.src = evt.target.result;
+									};
+									reader.readAsDataURL(file);
+								}
+							}
+							evt.preventDefault();
+						}, false);
+						
+						// Save image
+						var saveImage = document.createElement("button");
+						saveImage.innerHTML = "Salvare canvas";
+						saveImage.addEventListener("click", function (evt) {
+							window.open(canvas.toDataURL("image/png"));
+							evt.preventDefault();
+						}, false);
+						document.getElementById("main-content").appendChild(saveImage);
+					})();
+				</script>
+			</section>
+		</div>
+		
+		<footer id="page-footer" role="contentinfo">
+			Creat de Andreuta uta
+		</footer>
+	</div>
+	
+	
+	
+
+</body></html>
