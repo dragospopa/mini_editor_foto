@@ -3,7 +3,6 @@
 <head>
 	
 	<title>Mini Editor Foto</title>
-	<link rel="stylesheet" href="./css/base.css" type="text/css" media="screen">
 	<style type="text/css">
         html, body {
             width:100%;
@@ -22,6 +21,17 @@
 			position: relative;
 			border: 1px solid #000;
         }
+
+		#my-canvas{
+			width:700;
+			height:600;
+            margin-left: 75;
+            margin-bottom:20;
+            overflow:hidden;
+            background-color: #8C001A;
+            float: left;
+            left: 0;
+		}
     
         .w3-sidebar{
 			width:100px;
@@ -81,6 +91,14 @@
             height: 120%;
             margin: 0px;
         }
+
+		#page-footer{
+			position: fixed;
+			bottom: 0px;
+			float:left;
+			margin-left: 300px;
+		}
+
 	</style>
 </head>
 
@@ -92,14 +110,15 @@
 			            <input type="checkbox" class="checkbox" id="checkbox" />
 			            <div id="stuffToShow">
 			                    <div class="w3-sidebar w3-bar-block"> 
-			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
-			                    <a href="#" class="w3-bar-item w3-button"><img src="Media/desenare.png"></a>
+			                    <a href="#" id="pensula" class="w3-bar-item w3-button"><img src="Media/pensula.jpg"></a>
+								<a href="#" id="linie" class="w3-bar-item w3-button"><img src="Media/linie.png"></a>
+								<a href="#" id="dreptunghi" class="w3-bar-item w3-button"><img src="Media/dreptunghi.png"></a>
 			                </div>
 			            </div>
 			        </div>
 			        
 			        <div class="w3-bar-item w3-button" name="selectie" id="selectie">
-			            <label for="checkbox2" id="checkboxLabel2"><img src="Media/desenare.png"></label>
+			            <label for="checkbox2" id="checkboxLabel2"><img src="Media/selectie.png"></label>
 			            <input type="checkbox" class="checkbox" id="checkbox2" />
 			            <div id="stuffToShow">
 			                    <div class="w3-sidebar w3-bar-block"> 
@@ -110,24 +129,27 @@
 			        </div>
 			        
 			        <div class="w3-bar-item w3-button" name="crop" id="crop">
-			            <label for="checkbox3" id="checkboxLabel3"><img src="Media/desenare.png"></label>
+			            <label for="checkbox3" id="checkboxLabel3"><img src="Media/crop.png"></label>
 			            <input type="checkbox" class="checkbox" id="checkbox3" />
 			        </div>
 			        
 			        <div class="w3-bar-item w3-button" name="scalare" id="scalare">
-			            <label for="checkbox4" id="checkboxLabel4"><img src="Media/desenare.png"></label>
+			            <label for="checkbox4" id="checkboxLabel4"><img src="Media/scalare.png"></label>
 			            <input type="checkbox" class="checkbox" id="checkbox4" />
 			        </div>
 
 			        <div class="w3-bar-item w3-button" name="salvare" id="salvare">
-			            <label for="checkbox5" id="checkboxLabel5"><img src="Media/desenare.png"></label>
+			            <label for="checkbox5" id="checkboxLabel5"><img src="Media/salvare.png"></label>
 			            <input type="checkbox" class="checkbox" id="checkbox5" />
+					</div>
+					
+					<div class="w3-bar-item w3-button" name="pipeta" id="pipeta">
+			            <label for="checkbox6" id="checkboxLabel6"><img src="Media/pipeta.png"></label>
+			            <input type="checkbox" class="checkbox" id="checkbox6" />
 			        </div>
+
 			      </div>
 	<div id="container">
-		<header role="banner">
-			<h1>Mini Editor Foto</h1>
-		</header>
 				
 		<div role="main">
 			<section id="main-content">
@@ -160,28 +182,38 @@
 						}, false);
 						
 						// Detect mousedown
-						canvas.addEventListener("mousedown", function (evt) {
-							clearCanvas();
-							mouseDown = true;
-							context.beginPath();
-						}, false);
-						
-						// Detect mouseup
-						canvas.addEventListener("mouseup", function (evt) {
-							mouseDown = false;
-							var colors = context.getImageData(evt.layerX, evt.layerY, 1, 1).data;
-							brushColor = "rgb(" + colors[0] + ", " + colors[1] + ", " + colors[2] + ")";
+						checkbox6.addEventListener("change", function (e) { 
+							var check = document.getElementById("checkbox6");
+							if(check.checked==true) {
+								canvas.addEventListener("mousedown", function (evt) {
+										clearCanvas();
+										mouseDown = true;
+										context.beginPath();
+								}, false);
+								
+								// Detect mouseup
+								canvas.addEventListener("mouseup", function (evt) {
+										mouseDown = false;
+										var colors = context.getImageData(evt.layerX, evt.layerY, 1, 1).data;
+										brushColor = "rgb(" + colors[0] + ", " + colors[1] + ", " + colors[2] + ")";
+								}, false); }
+								else {
+									canvas.removeEventListener("mousedown");
+									canvas.removeEventListener("mouseup")
+								}
 						}, false);
 						
 						// Draw, if mouse button is pressed
-						canvas.addEventListener("mousemove", function (evt) {
-							if (mouseDown) {
-								context.strokeStyle = brushColor;								
-								context.lineWidth = 20;
-								context.lineJoin = "round";
-								context.lineTo(evt.layerX+1, evt.layerY+1);
-								context.stroke();
-							}
+						pensula.addEventListener("click", function(e){ 
+							canvas.addEventListener("mousemove", function (evt) {
+								if (mouseDown) {
+									context.strokeStyle = brushColor;								
+									context.lineWidth = 20;
+									context.lineJoin = "round";
+									context.lineTo(evt.layerX+1, evt.layerY+1);
+									context.stroke();
+								}
+							}, false); 
 						}, false);
 
 						// To enable drag and drop
@@ -207,10 +239,10 @@
 						}, false);
 						
 						// Save image
-						var saveImage = document.createElement("button");
-						saveImage.innerHTML = "Salvare canvas";
+						var saveImage = document.getElementById("checkbox5");
+						saveImage.innerHTML = "Save canvas";
 						saveImage.addEventListener("click", function (evt) {
-							window.open(canvas.toDataURL("image/png"));
+							window.open(canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
 							evt.preventDefault();
 						}, false);
 						document.getElementById("main-content").appendChild(saveImage);
