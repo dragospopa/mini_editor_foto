@@ -8,13 +8,17 @@
             width:100%;
             height:100%;
             overflow:hidden;
-            background-color: papayawhip;
+            background-color: white;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 12px;
         }
     
         .w3-bar-item img{
             width: 50%;
             height: 50%;
-            margin-left: 25%;
+            margin-left: 13px;
+            margin-bottom: 10px;
+            margin-top: 10px;
         }
     
         canvas{
@@ -23,31 +27,36 @@
         }
 
 		#my-canvas{
-			width:700;
+			width: 700;
 			height:600;
-            margin-left: 75;
-            margin-bottom:20;
-            overflow:hidden;
-            background-color: #8C001A;
+            margin-left: 75px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background-color: #e0e0e0;
             float: left;
             left: 0;
+            border-radius: 5px;
 		}
     
         .w3-sidebar{
-			width:100px;
             float:left;
-            background-color: grey;
+            background-color: white;
             overflow: hidden;
             height: 1200px;
         }
     
         .w3-button{
             color: #8C001A;
-            size:50px;
+            size: 50px;
         }
     
         .w3-bar-item{
-            size:30px;
+            size: 30px;
+            transition: 100ms;
+        }
+
+        .w3-bar-item:hover{
+        	box-shadow: 6px 6px 6px 6px #e0e0e0;
         }
     
         #stuffToShow {
@@ -103,10 +112,23 @@
         }
 
 		#page-footer{
+			background-color: black;
+			color: #cfcfcf;
+			padding: 10px;
 			position: fixed;
 			bottom: 0px;
+			height:50px;
+			width: 105%;
+			box-shadow: 10px 0px 10px 10px #e0e0e0; 
 			float:left;
-			margin-left: 300px;
+			z-index: 100;
+			text-align: center;
+			margin-left: -30px;
+		}
+
+		.w3-bar-block {
+			width: 80px !important;
+			box-shadow: 1px 1px 10px 1px #efefef;
 		}
 
 	</style>
@@ -121,12 +143,17 @@
 			            <div id="stuffToShow">
 			                    <div class="w3-sidebar w3-bar-block"> 
 			                    	<div class="w3-bar-item w3-button" name="crop" id="crop">
-							            <label for="checkbox7" id="checkboxLabel7"><img src="Media/pensula.png"></label>
-							            <input type="checkbox" onclick="checkPensula()" class="checkbox7" id="pensula" />
+							            <label for="pensula" id="checkboxLabel7"><img src="Media/pensula.png"></label>
+							            <input type="checkbox" class="checkbox" id="pensula" />
 							        </div>
-			                    <!---<input type="checkbox" id="pensula"  class="w3-bar-item w3-button"><img src="Media/pensula.png"></input>-->
-								<a href="#" id="linie" class="w3-bar-item w3-button"><img src="Media/linie.png"></a>
-								<a href="#" id="dreptunghi" class="w3-bar-item w3-button"><img src="Media/dreptunghi.png"></a>
+									<div class="w3-bar-item w3-button" name="crop" id="crop">
+							            <label for="linie" id="checkboxLabel8"><img src="Media/linie.png"></label>
+							            <input type="checkbox" class="checkbox" id="linie" />
+									</div>
+									<div class="w3-bar-item w3-button" name="crop" id="crop">
+							            <label for="dreptunghi" id="checkboxLabel9"><img src="Media/dreptunghi.png"></label>
+							            <input type="checkbox" class="checkbox" id="dreptunghi" />
+							        </div>
 			                </div>
 			            </div>
 			        </div>
@@ -168,25 +195,18 @@
 		<div role="main">
 			<section id="main-content">
 				
-				<canvas id="my-canvas" width="700" height="600">Eu sunt canvas-ul.</canvas>
-				<script type="text/javascript">
-					
-				function checkPensula(){
-					var canvas = document.getElementById("my-canvas")
-					console.log("here");
-			    	var checkbox = document.getElementById('pensula');
-			  		if (checkbox.checked != true){
-			    		alert("pensula dezactivata");
-			    		canvas.removeEventListener("mousemove", desenare_pensula, false);
-					}
-				}
-						
-				</script>
+				<canvas id="my-canvas" width="700" height="600"></canvas>
 				<script>
 					(function () {
 						var canvas = document.getElementById("my-canvas"),
 						context = canvas.getContext("2d"),
 						img = document.createElement("img"),
+						buton_pensula = document.getElementById("pensula"),
+						buton_pipeta = document.getElementById("checkbox6"),
+						buton_dreptunghi = document.getElementById("dreptunghi"),
+						buton_linie = document.getElementById("linie");
+						dreptunghi = document.createElement("rect");
+
 						mouseDown = false,
 						brushColor = "rgb(0, 0, 0)",
 						hasText = true,
@@ -223,25 +243,27 @@
 							context.drawImage(img, 0, 0);
 						}, false);
 						
-						// Detect mousedown
-						checkbox6.addEventListener("change", function (e) {
-							var check_sunet = new sunet("Media/pipeta.wav");
-							check_sunet.play(); 
-							var check = document.getElementById("checkbox6");
-							
-								canvas.addEventListener("mousedown", function (evt) {
+						canvas.addEventListener("mousedown", function (evt) {
 										clearCanvas();
 										mouseDown = true;
 										context.beginPath();
+										var x = evt.layerX;
+										var y = evt.layerY;
+										context.moveTo(x,y);
 								}, false);
+
+						// Detect mousedown
+						checkbox6.addEventListener("change", function (e) {
+							var check_sunet = new sunet("Media/pipeta.wav");
+							check_sunet.play(); 		
 								
 								// Detect mouseup
 								canvas.addEventListener("mouseup", function (evt) {
 										mouseDown = false;
 										var colors = context.getImageData(evt.layerX, evt.layerY, 1, 1).data;
-										if(check.checked==true) {
+										if(buton_pipeta.checked==true) {
 											brushColor = "rgb(" + colors[0] + ", " + colors[1] + ", " + colors[2] + ")";
-											check.checked=false;
+											buton_pipeta.checked=false;
 										}
 								}, false);
 						}, false);
@@ -253,8 +275,13 @@
 							var pensula_sunet = new sunet("Media/pensula.wav");
 							var desenare_sunet = new sunet("Media/desenare_pensula.wav");
 							pensula_sunet.play(); 
-							var buton_pensula = document.getElementById("pensula");
-							
+
+							if (buton_pensula.checked==true)
+							{
+								buton_dreptunghi.checked=false;
+								buton_linie.checked=false;
+							}				
+
 							canvas.addEventListener("mousemove", function desenare_pensula (evt) {
 								if (mouseDown && buton_pensula.checked==true) {
 									desenare_sunet.play();
@@ -264,10 +291,73 @@
 									context.lineTo(evt.layerX+1, evt.layerY+1);
 									context.stroke();
 								}
-							}, false); 
-							
-	
-						}, false);
+							}); 
+
+						});
+
+						linie.addEventListener("change", function(e) {
+							var linie_sunet = new sunet("Media/linie.wav");
+							var desenare_sunet = new sunet("Media/desenare_linie.wav");
+							linie_sunet.play(); 
+
+							if (buton_linie.checked==true)
+							{
+								buton_dreptunghi.checked=false;
+								buton_pensula.checked=false;
+							}
+
+							canvas.addEventListener("mousemove", function desenare_linie(evt) {
+								if (mouseDown && buton_linie.checked==true) {
+									desenare_sunet.play();
+								}
+							});
+
+							canvas.addEventListener("mouseup", function desenare_linie(evt) {
+								mouseDown=false;
+								if(buton_linie.checked==true) {
+									desenare_sunet.play();
+									context.strokeStyle = brushColor;								
+									context.lineWidth = 5;
+									context.lineTo(evt.layerX+1, evt.layerY+1);
+									context.closePath();
+									context.stroke();
+								}
+							});
+
+						});
+
+						dreptunghi.addEventListener("change", function(e) {
+							var dreptunghi_sunet = new sunet("Media/dreptunghi.wav");
+							var desenare_sunet = new sunet("Media/desenare_pensula.wav");
+							dreptunghi_sunet.play(); 
+
+							if (buton_dreptunghi.checked==true)
+							{
+								buton_linie.checked=false;
+								buton_pensula.checked=false;
+								desenare_sunet.play();
+							}
+
+							canvas.addEventListener("mousemove", function desenare_dreptunghi (evt) {
+								if (mouseDown && buton_dreptunghi.checked==true) {
+									desenare_sunet.play();
+								}
+							});
+
+							canvas.addEventListener("mouseup", function desenare_dreptunghi(evt) {
+								mouseDown=false;
+								if(buton_linie.checked==true) {
+									desenare_sunet.play();
+									context.strokeStyle = brushColor;								
+									context.lineWidth = 5;
+									context.rect(x,y,evt.layerX+1-x,evt.layerY+1-y);
+									context.closePath();
+									context.stroke();
+								}
+							});
+
+
+						});
 
 						// To enable drag and drop
 						canvas.addEventListener("dragover", function (evt) {
@@ -276,6 +366,9 @@
 
 						// Handle dropped image file - only Firefox and Google Chrome
 						canvas.addEventListener("drop", function (evt) {
+							var drop_sunet = new sunet("Media/drop.wav");
+							drop_sunet.play();
+
 							var files = evt.dataTransfer.files;
 							if (files.length > 0) {
 								var file = files[0];
@@ -305,7 +398,7 @@
 		</div>
 		
 		<footer id="page-footer" role="contentinfo">
-			Creat de Andreuta uta
+			Andreea Bajenaru / Grupa 1065<br>Facultatea de Cibernetica, Statistica si Informatica Economica / Academia de studii Romane. <br>06/01/2019
 		</footer>
 	</div>
 	
