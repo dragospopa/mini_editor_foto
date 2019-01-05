@@ -120,7 +120,11 @@
 			            <input type="checkbox" class="checkbox" id="checkbox" />
 			            <div id="stuffToShow">
 			                    <div class="w3-sidebar w3-bar-block"> 
-			                    <a href="#" id="pensula" class="w3-bar-item w3-button"><img src="Media/pensula.jpg"></a>
+			                    	<div class="w3-bar-item w3-button" name="crop" id="crop">
+							            <label for="checkbox7" id="checkboxLabel7"><img src="Media/pensula.png"></label>
+							            <input type="checkbox" onclick="checkPensula()" class="checkbox7" id="pensula" />
+							        </div>
+			                    <!---<input type="checkbox" id="pensula"  class="w3-bar-item w3-button"><img src="Media/pensula.png"></input>-->
 								<a href="#" id="linie" class="w3-bar-item w3-button"><img src="Media/linie.png"></a>
 								<a href="#" id="dreptunghi" class="w3-bar-item w3-button"><img src="Media/dreptunghi.png"></a>
 			                </div>
@@ -165,62 +169,19 @@
 			<section id="main-content">
 				
 				<canvas id="my-canvas" width="700" height="600">Eu sunt canvas-ul.</canvas>
-        		<script type="text/javascript">
-        			//HTML elements
-				var canvas = document.getElementById("my-canvas");
-				var ctx = canvas.getContext("2d");
-				//Current unconnected points
-				var mouse = [];
-				//Existing triangles
-				var triangles = [];
-				//The function that draws
-				function draw() {
-				    //Clear canvas
-				    ctx.clearRect(0, 0, canvas.width, canvas.height);
-				    //Draw existing triangles
-				    for (var tIndex = 0; tIndex < triangles.length; tIndex++) {
-				      var triangle = triangles[tIndex];
-				      ctx.beginPath();
-				      ctx.moveTo(triangle.a.x, triangle.a.y);
-				      ctx.lineTo(triangle.b.x, triangle.b.y);
-				      ctx.lineTo(triangle.c.x, triangle.c.y);
-				      ctx.closePath();
-				      ctx.stroke();
-				    }
-				    //Draw current mouse points
-				    if (mouse.length > 0) {
-				      ctx.beginPath();
-				      ctx.moveTo(mouse[0].x, mouse[0].y);
-				    }
-				    if (mouse.length > 1) {
-				      ctx.lineTo(mouse[1].x, mouse[1].y);
-				    }
-				    if (mouse.length > 0) {
-				      ctx.stroke();
-				    }
-				  }
-				  //Catch point
-				canvas.onclick = function eventHandler(event) {
-				  //Add points to list
-				  mouse.push({
-				    x: event.layerX,
-				    y: event.layerY
-				  });
-				  //If we have enough points, add a triangle
-				  if (mouse.length >= 3) {
-				    //Adding the triangle
-				    triangles.push({
-				      a: mouse[0],
-				      b: mouse[1],
-				      c: mouse[2]
-				    });
-				    //Clear points
-				    mouse = [];
-				  }
-				  //Update canvas
-				  draw();
-				};
-        		</script>
+				<script type="text/javascript">
+					
+				function checkPensula(){
+					var canvas = document.getElementById("my-canvas")
+					console.log("here");
+			    	var checkbox = document.getElementById('pensula');
+			  		if (checkbox.checked != true){
+			    		alert("pensula dezactivata");
+			    		canvas.removeEventListener("mousemove", desenare_pensula, false);
+					}
+				}
+						
+				</script>
 				<script>
 					(function () {
 						var canvas = document.getElementById("my-canvas"),
@@ -254,7 +215,7 @@
 							
 						// Adding instructions
 						context.fillText("Trage o imagine in canvas", 240, 200);
-						context.fillText("Apasa pe un loc din iamgine ca se setezi culoarea pensulei.", 240, 220);
+						context.fillText("Apasa pe un loc din imagine ca se setezi culoarea pensulei.", 240, 220);
 						
 						// Image for loading	
 						img.addEventListener("load", function () {
@@ -284,15 +245,18 @@
 										}
 								}, false);
 						}, false);
-						
+
+
+
 						// Draw, if mouse button is pressed
-						pensula.addEventListener("click", function(e){ 
+						pensula.addEventListener("change", function(e){ 
 							var pensula_sunet = new sunet("Media/pensula.wav");
 							var desenare_sunet = new sunet("Media/desenare_pensula.wav");
 							pensula_sunet.play(); 
+							var buton_pensula = document.getElementById("pensula");
 							
-							canvas.addEventListener("mousemove", function (evt) {
-								if (mouseDown) {
+							canvas.addEventListener("mousemove", function desenare_pensula (evt) {
+								if (mouseDown && buton_pensula.checked==true) {
 									desenare_sunet.play();
 									context.strokeStyle = brushColor;								
 									context.lineWidth = 20;
@@ -302,6 +266,7 @@
 								}
 							}, false); 
 							
+	
 						}, false);
 
 						// To enable drag and drop
