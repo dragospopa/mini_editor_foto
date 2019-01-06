@@ -1,0 +1,59 @@
+Seminare:
+
+canvas.addEventListener("dragover", function (evt) {
+	evt.preventDefault();
+}, false);
+
+canvas.addEventListener("drop", function (evt) {
+		var drop_sunet = new sunet("Media/drop.wav");
+		drop_sunet.play();
+
+		var files = evt.dataTransfer.files;
+		if (files.length > 0) {
+		var file = files[0];
+		if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+		var reader = new FileReader();
+		reader.onload = function (evt) {
+		img.src = evt.target.result;
+		};
+		reader.readAsDataURL(file);
+	}
+}
+evt.preventDefault();
+}, false);
+						
+
+
+
+
+
+https://www.w3schools.com :
+function sunet(src) {
+    		this.sound = document.createElement("audio");
+    		this.sound.src = src;
+    		this.sound.setAttribute("preload", "auto");
+    		this.sound.setAttribute("controls", "none");
+    		this.sound.style.display = "none";
+    		document.body.appendChild(this.sound);
+    		this.play = function(){
+       		this.sound.play();
+    		}
+    		this.stop = function(){
+        	this.sound.pause();
+    		}    
+	}
+
+https://robertnyman.com/html5/canvas/the-cure.html :
+
+img.addEventListener("load", function () {
+			clearCanvas();
+			context.drawImage(img, 0, 0);
+		}, false);
+
+saveImage.innerHTML = "Save canvas";
+saveImage.addEventListener("click", function (evt) {
+			var salvare_sunet = new sunet("Media/salvare.wav");
+			salvare_sunet.play();
+			window.open(canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+			evt.preventDefault();
+		}, false);

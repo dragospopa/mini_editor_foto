@@ -1,0 +1,115 @@
+html, body {
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            background-color: white;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 12px;
+        }
+    
+/* Stilizare canvas */
+
+canvas{
+	    position: relative;
+	    border: 1px solid #000;
+        }
+
+#my-canvas{
+	    width: 1000px;
+	    height:800px;
+            margin-left: 75px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background-color: #e0e0e0;
+            float: left;
+            left: 0;
+            border-radius: 5px;
+	}
+
+/* Stilizare sidebar */
+
+.w3-bar-item img{
+            width: 50%;
+            height: 50%;
+            margin-left: 13px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+    
+.w3-sidebar{
+            float:left;
+            background-color: white;
+            overflow: hidden;
+            height: 1200px;
+        }
+    
+.w3-button{
+            color: #8C001A;
+            size: 50px;
+        }
+    
+.w3-bar-item{
+            size: 30px;
+            transition: 100ms;
+        }
+
+.w3-bar-item:hover{
+            box-shadow: 6px 6px 6px 6px #e0e0e0;
+        }
+    
+#Sidebar{
+            display:none;
+        }
+    
+.checkbox {
+            opacity:0.01;
+            position: absolute;
+            height: 50px;
+        }
+        
+#desenare:checked + #Sidebar {
+            display:block;
+            position: fixed;
+            top:10px;
+            left:100px;
+            height: 50px;
+            z-index: 100;
+        }
+
+#Sidebar .w3-sidebar {
+            width: 50px;
+            float: left;
+            height: auto;
+            background-color: white;
+            padding: 2px; 
+        }
+    
+#Sidebar .w3-sidebar img{
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            transition: 200ms;
+        }
+
+
+.w3-bar-block {
+	    width: 80px !important;
+	    box-shadow: 1px 1px 10px 1px #efefef;
+	}
+   
+/* Stilizare footer */
+
+#page-footer{
+	    background-color: black;
+	    color: #cfcfcf;
+	    padding: 10px;
+	    position: fixed;
+	    bottom: 0px;
+	    height:50px;
+	    width: 105%;
+	    box-shadow: 10px 0px 10px 10px #e0e0e0; 
+	    float:left;
+	    z-index: 100;
+	    text-align: center;
+	    margin-left: -30px;
+	}
